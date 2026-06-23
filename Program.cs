@@ -107,11 +107,12 @@ var parameters = new XdmValue[] { XdmEmptySequence.Instance };
 var fnCurrentQN = new QName(nsUri, fnCurrent);
 var fnConstQN = new QName(nsUri, fnConst);
 var fnStringQN = new QName(nsUri, fnString);
+using var reader = new StringReader(docStr);
 
 var processor = new Processor();
 var docBuilder = processor.NewDocumentBuilder();
 var compiler = processor.NewXsltCompiler();
-var docXdm = docBuilder.Build(new StringReader(docStr));
+var docXdm = docBuilder.Build(reader);
 var transformer = compiler.Compile(docXdm).Load30();
 var controller = transformer.GetUnderlyingController;
 controller.setCurrentDateTime(pinnedDateTime);
