@@ -8,8 +8,9 @@ results across runs when seeded with `xs:dateTime`, even when the seed value is 
 Using the same seed value should produce the same random sequence across separate executions.
 
 ## Actual behavior
-When the seed is provided as `xs:dateTime`, the generated value changes between runs.
-When the same timestamp is provided as a string seed, the generated value remains stable between runs.
+When the seed is provided as `xs:dateTime`, the generated value changes between runs. When the same timestamp is
+provided as a string seed, the generated value remains stable between runs. This means that the same logical timestamp
+value leads to different results depending on whether it is passed as `xs:dateTime` or as a string.
 
 ## Setup
 - .NET 10.0
@@ -17,14 +18,14 @@ When the same timestamp is provided as a string seed, the generated value remain
 - OS: Windows 11 25H2 x64
 
 ## Reproduction
-1. Run the project once.
+1. Run `dotnet run`.
 2. Note the generated values.
-3. Run the project again.
+3. Run `dotnet run` again.
 4. Compare the outputs.
 
 ## Test setup details
 The XSLT document contains three variants:
-1. `current-dateTime()` as seed
+1. `current-dateTime()` as seed (pinned by the host application)
 2. constant `xs:dateTime` as seed
 3. `string(current-dateTime())` as seed
 
@@ -34,6 +35,9 @@ To eliminate runtime clock differences, the current date/time is pinned using
 All variants effectively use the same timestamp value: `2025-02-16T09:35:47Z`
 
 ## Sample output
+The values for `random-constDateTime` and `random-currentDateTime` change across runs, while `random-stringDateTime`
+remains stable.
+
 ### Run 1
 ```
 random-currentDateTime 1:	59300
